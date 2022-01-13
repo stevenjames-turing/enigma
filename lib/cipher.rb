@@ -45,41 +45,46 @@ class Cipher
   # end
 
   def encrypted_message_as_array
-    a,b,c,d = prep_message_for_shifts
+    message_array = prep_message_for_shifts
     a_letters = []
     b_letters = []
     c_letters = []
     d_letters = []
     encrypted_array = [a_letters, b_letters, c_letters, d_letters]
-    a.each do |letter|
+    message_array[0].each do |letter|
       until @character_set[0] == letter
         @character_set = @character_set.rotate
       end
       @character_set = @character_set.rotate(shifts.a_shift)
       a_letters << @character_set[0]
     end
-    b.each do |letter|
+    message_array[1].each do |letter|
       until @character_set[0] == letter
         @character_set = @character_set.rotate
       end
       @character_set = @character_set.rotate(shifts.b_shift)
       b_letters << @character_set[0]
     end
-    c.each do |letter|
+    message_array[2].each do |letter|
       until @character_set[0] == letter
         @character_set = @character_set.rotate
       end
       @character_set = @character_set.rotate(shifts.c_shift)
       c_letters << @character_set[0]
     end
-    d.each do |letter|
+    message_array[3].each do |letter|
       until @character_set[0] == letter
         @character_set = @character_set.rotate
       end
       @character_set = @character_set.rotate(shifts.d_shift)
       d_letters << @character_set[0]
     end
-    encrypted_array.flatten
+    encrypted_array
+  end
+
+  def encrypted_message_as_string
+    encrypted_array = encrypted_message_as_array
+    encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).flatten.compact.join
   end
 
 
