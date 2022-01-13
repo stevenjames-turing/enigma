@@ -28,32 +28,48 @@ class Cipher
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
     encrypted_array = [a_letters, b_letters, c_letters, d_letters]
     message_array[0].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.a_shift)
+        a_letters << @character_set[0]
+      else
+        a_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.a_shift)
-      a_letters << @character_set[0]
     end
     message_array[1].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.b_shift)
+        b_letters << @character_set[0]
+      else
+        b_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.b_shift)
-      b_letters << @character_set[0]
     end
     message_array[2].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.c_shift)
+        c_letters << @character_set[0]
+      else
+        c_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.c_shift)
-      c_letters << @character_set[0]
     end
     message_array[3].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.d_shift)
+        d_letters << @character_set[0]
+      else
+        d_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.d_shift)
-      d_letters << @character_set[0]
     end
     encrypted_array
   end
