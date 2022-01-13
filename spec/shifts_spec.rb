@@ -24,4 +24,11 @@ RSpec.describe Shifts do
     expect(shifts_object.d_offset).to eq(5)
   end
 
+  it 'calculates the shifts using the keys and offsets' do
+    expect(shifts_object.a_shift).to eq(3)
+    expect(shifts_object.b_shift).to eq(27)
+    expect(shifts_object.c_shift).to eq(73)
+    expect(shifts_object.d_shift).to eq(20)
+  end
+
 end
