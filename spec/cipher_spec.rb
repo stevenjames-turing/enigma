@@ -13,4 +13,10 @@ RSpec.describe Cipher do
     expect(cipher.key).to eq("02715")
     expect(cipher.date).to eq("040895")
   end
+
+  it 'has a default character set' do
+    expected = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
+                "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
+    expect(cipher.character_set).to eq(expected)
+  end 
 end
