@@ -12,11 +12,7 @@ class Cipher
 
   def prep_message_for_shifts
     message_as_array = @message.split("")
-    a_letters = []
-    b_letters = []
-    c_letters = []
-    d_letters = []
-
+    a_letters = []; b_letters = []; c_letters = []; d_letters = []
     until message_as_array.empty?
       a_letters << message_as_array[0]
       b_letters << message_as_array[1]
@@ -24,60 +20,56 @@ class Cipher
       d_letters << message_as_array[3]
       4.times {message_as_array.shift}
     end
-    shift_arrays = [a_letters, b_letters.compact, c_letters.compact, d_letters.compact]
+    shifted_arrays = [a_letters, b_letters.compact, c_letters.compact, d_letters.compact]
   end
-
-  # def encrypted_message_as_array
-  #   encrypted_array = []
-  #   message_arrays = prep_message_for_shifts
-  #   until message_arrays.all? {|array| array.empty?}
-  #     message_arrays.each do |array|
-  #       until @character_set[0] == array[0]
-  #         @character_set = @character_set.rotate
-  #         # require 'pry'; binding.pry
-  #       end
-  #       encrypted_array << @character_set[0]
-  #       array.shift
-  #     end
-  #   end
-  #   # encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).flatten.compact.join
-  #   encrypted_array.compact
-  # end
 
   def encrypted_message_as_array
     message_array = prep_message_for_shifts
-    a_letters = []
-    b_letters = []
-    c_letters = []
-    d_letters = []
+    a_letters = []; b_letters = []; c_letters = []; d_letters = []
     encrypted_array = [a_letters, b_letters, c_letters, d_letters]
     message_array[0].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.a_shift)
+        a_letters << @character_set[0]
+      else
+        a_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.a_shift)
-      a_letters << @character_set[0]
     end
     message_array[1].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.b_shift)
+        b_letters << @character_set[0]
+      else
+        b_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.b_shift)
-      b_letters << @character_set[0]
     end
     message_array[2].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.c_shift)
+        c_letters << @character_set[0]
+      else
+        c_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.c_shift)
-      c_letters << @character_set[0]
     end
     message_array[3].each do |letter|
-      until @character_set[0] == letter
-        @character_set = @character_set.rotate
+      if @character_set.include?(letter)
+        until @character_set[0] == letter
+          @character_set = @character_set.rotate
+        end
+        @character_set = @character_set.rotate(shifts.d_shift)
+        d_letters << @character_set[0]
+      else
+        d_letters << letter
       end
-      @character_set = @character_set.rotate(shifts.d_shift)
-      d_letters << @character_set[0]
     end
     encrypted_array
   end
@@ -86,7 +78,4 @@ class Cipher
     encrypted_array = encrypted_message_as_array
     encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).flatten.compact.join
   end
-
-
-
 end
