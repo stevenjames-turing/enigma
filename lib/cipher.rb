@@ -78,5 +78,4 @@ class Cipher
     encrypted_array = encrypted_message_as_array
     encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).flatten.compact.join
   end
-
 end

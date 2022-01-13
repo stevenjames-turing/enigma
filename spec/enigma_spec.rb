@@ -24,6 +24,14 @@ RSpec.describe Enigma do
     expect(enigma.encrypt("hello world", "02715")).to eq(expected)
   end
 
+  it 'can encrypt a message generating a random key and using today as date' do
+    expect(enigma.encrypt("hello world")).to_not eq nil
+    expect(enigma.encrypt("hello world")[:key].length).to eq(5)
+    expect(enigma.encrypt("hello world")[:encryption].length).to eq(11)
+    expect(enigma.encrypt("hello world")[:encryption].length).to_not eq("hello world")
+    expect(enigma.encrypt("hello world")[:date]).to eq(Date.today.strftime("%d%m%y"))
+  end
+
 
 
 end
