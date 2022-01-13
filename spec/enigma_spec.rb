@@ -16,6 +16,14 @@ RSpec.describe Enigma do
     expect(enigma.encrypt("hello world", "02715", "040895")).to eq(expected)
   end
 
+  it 'can encrypt a message with only a key (using today as date)' do
+    expected = {encryption: "nmjduhugxtb",
+                key: "02715",
+                date: Date.today.strftime("%d%m%y")}
+
+    expect(enigma.encrypt("hello world", "02715")).to eq(expected)
+  end
+
 
 
 end
