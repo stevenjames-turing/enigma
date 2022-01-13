@@ -1,0 +1,116 @@
+{
+  "RSpec": {
+    "coverage": {
+      "/Users/stevenjames/turing/1module/projects/enigma/lib/enigma.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/stevenjames/turing/1module/projects/enigma/lib/shifts.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/stevenjames/turing/1module/projects/enigma/lib/cipher.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          1,
+          4,
+          4,
+          4,
+          4,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/stevenjames/turing/1module/projects/enigma/spec/enigma_spec.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          1,
+          null,
+          2,
+          null,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/stevenjames/turing/1module/projects/enigma/spec/shifts_spec.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          5,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "timestamp": 1642100798
+  }
+}

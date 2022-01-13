@@ -1,4 +1,4 @@
-require './lib/cipher'
+require_relative './spec_helper'
 
 RSpec.describe Cipher do
 
