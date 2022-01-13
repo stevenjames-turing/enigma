@@ -24,4 +24,8 @@ RSpec.describe Cipher do
     cipher_captest = Cipher.new("hElLo WoRlD", "02715", "040895")
     expect(cipher_captest.message).to eq("hello world")
   end
+
+  it 'can split the message into arrays to prepare for shifts' do
+    expect(cipher.prep_message_for_shifts.count).to eq(4)
+  end
 end
