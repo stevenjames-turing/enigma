@@ -28,4 +28,10 @@ RSpec.describe Cipher do
   it 'can split the message into arrays to prepare for shifts' do
     expect(cipher.prep_message_for_shifts.count).to eq(4)
   end
+
+  it 'can shift the characters and return encrypted message as array' do
+    # expected = ["k","e","d","e","r"," ","o","h","u","l","w"]
+    expected = ["k","r","u","e"," ","l","d","o","w","e","h"]
+    expect(cipher.encrypted_message_as_array).to eq(expected)
+  end
 end
