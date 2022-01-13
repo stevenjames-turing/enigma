@@ -18,5 +18,10 @@ RSpec.describe Cipher do
     expected = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
                 "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
     expect(cipher.character_set).to eq(expected)
-  end 
+  end
+
+  it 'will always use a message with lowercase letters' do
+    cipher_captest = Cipher.new("hElLo WoRlD", "02715", "040895")
+    expect(cipher_captest.message).to eq("hello world")
+  end
 end
