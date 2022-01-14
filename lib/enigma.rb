@@ -16,4 +16,11 @@ class Enigma
                 date: date}
   end
 
+  def decrypt(message, key, date)
+    cipher = Cipher.new(message, key, date)
+    decrypted = {decryption: cipher.decrypted_message_as_string,
+                key: key,
+                date: date}
+  end
+
 end
