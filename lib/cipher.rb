@@ -76,6 +76,6 @@ class Cipher
 
   def encrypted_message_as_string
     encrypted_array = encrypted_message_as_array
-    encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).flatten.compact.join
+    encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).join
   end
 end
