@@ -130,5 +130,8 @@ class Cipher
     decrypted_array
   end
 
-  
+  def decrypted_message_as_string
+    decrypted_array = decrypted_message_as_array
+    decrypted_array[0].zip(decrypted_array[1]).zip(decrypted_array[2]).zip(decrypted_array[3]).join
+  end
 end
