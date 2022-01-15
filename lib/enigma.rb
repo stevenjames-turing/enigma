@@ -23,6 +23,11 @@ class Enigma
                 date: date}
   end
 
-  
+  def crack(message, date = @today)
+    cipher = Cipher.new(message, date)
+    cracked = {decryption: cipher.crack_encryption,
+              key: cipher.key,
+              date: date}
+  end
 
 end
