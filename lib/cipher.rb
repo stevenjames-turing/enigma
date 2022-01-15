@@ -197,6 +197,10 @@ class Cipher
     shifts.d_key = (shifts.d_shift - shifts.d_offset).to_s.rjust(2, "0")
   end
 
-  
+  def crack_encryption
+    calculate_shifts
+    @key = shifts.get_valid_key
+    decrypted_message_as_string
+  end
 
 end
