@@ -50,13 +50,23 @@ RSpec.describe Enigma do
   end
 
   it 'can crack an encrypted message with date, but no key provided' do
-    encrypted = enigma.encrypt("hello world end", "08304", "291018")
+    encrypted = enigma.encrypt("hello world end", "291018")
 
     expected = {decryption: "hello world end",
                 date: "291018",
                 key: "08304"}
 
     expect(enigma.crack("vjqtbeaweqihssi", "291018")).to eq(expected)
+  end
+
+  it 'can crack an encrypted message with no key or date provided' do
+    encrypted = enigma.encrypt("hello world end")
+
+    expected = {decryption: "hello world end",
+      date: Date.today.strftime("%d%m%y"),
+      key: "37834"}
+
+    expect(enigma.crack("vjqtbeaweqihssi")).to eq(expected)
   end
 
 
