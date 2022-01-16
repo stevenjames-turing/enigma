@@ -16,4 +16,20 @@ class Enigma
                 date: date}
   end
 
+  def decrypt(ciphertext, key, date = @today)
+    cipher = Cipher.new(ciphertext, key, date)
+    decrypted = {decryption: cipher.decrypted_message_as_string,
+                key: key,
+                date: date}
+  end
+
+  def crack(ciphertext, date = @today)
+    cipher = Cipher.new(ciphertext, date)
+    cracked = {decryption: cipher.crack_encryption,
+              key: cipher.key,
+              date: date}
+  end
+
+
+
 end
