@@ -38,7 +38,7 @@ RSpec.describe Cipher do
   end
 
   it 'can turn encrypted array into string' do
-    expect(cipher.encrypted_message_as_string).to eq("keder ohulw")
+    expect(cipher.message_as_string("encrypted")).to eq("keder ohulw")
   end
 
   it 'returns any characters not included in the character set as itself' do
