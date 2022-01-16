@@ -29,7 +29,4 @@ class Enigma
               key: cipher.key,
               date: date}
   end
-
-
-
 end
