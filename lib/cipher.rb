@@ -10,131 +10,46 @@ class Cipher
     @shifts = Shifts.new(@key, @date)
   end
 
+  def message_as_array
+    @message.split("")
+  end
+
   def prep_message_for_shifts
-    # CAN I USE A HASH FOR BETTER ORGANIZING OF DATA?
-    message_as_array = @message.split("")
+    original_message = message_as_array
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    until message_as_array.empty?
-      a_letters << message_as_array[0]
-      b_letters << message_as_array[1]
-      c_letters << message_as_array[2]
-      d_letters << message_as_array[3]
-      4.times {message_as_array.shift}
+    until original_message.empty?
+      a_letters << original_message[0]; b_letters << original_message[1]
+      c_letters << original_message[2]; d_letters << original_message[3]
+      4.times {original_message.shift}
     end
-    shifted_arrays = [a_letters, b_letters.compact, c_letters.compact, d_letters.compact]
+    prepped_hash = {A: a_letters, B: b_letters.compact, C: c_letters.compact, D: d_letters.compact}
   end
 
-  def encrypted_message_as_array
-    # CAN I USE A HASH FOR BETTER ORGANIZING OF DATA?
-    message_array = prep_message_for_shifts
+  def shifted_message_as_array(shift_direction)
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    encrypted_array = [a_letters, b_letters, c_letters, d_letters]
-    message_array[0].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
+    prep_message_for_shifts.each_pair do |key, array|
+      array.each do |char|
+        if @character_set.include?(char)
+          (@character_set = @character_set.rotate) until @character_set[0] == char
+          (@character_set = @character_set.rotate(shifts.a_shift * shift_direction)) && (a_letters << @character_set[0]) if key == :A
+          (@character_set = @character_set.rotate(shifts.b_shift * shift_direction)) && (b_letters << @character_set[0]) if key == :B
+          (@character_set = @character_set.rotate(shifts.c_shift * shift_direction)) && (c_letters << @character_set[0]) if key == :C
+          (@character_set = @character_set.rotate(shifts.d_shift * shift_direction)) && (d_letters << @character_set[0]) if key == :D
+        else
+          a_letters << char if key == :A; b_letters << char if key == :B
+          c_letters << char if key == :C; d_letters << char if key == :D
         end
-        @character_set = @character_set.rotate(shifts.a_shift)
-        a_letters << @character_set[0]
-      else
-        a_letters << letter
       end
     end
-    message_array[1].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.b_shift)
-        b_letters << @character_set[0]
-      else
-        b_letters << letter
-      end
-    end
-    message_array[2].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.c_shift)
-        c_letters << @character_set[0]
-      else
-        c_letters << letter
-      end
-    end
-    message_array[3].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.d_shift)
-        d_letters << @character_set[0]
-      else
-        d_letters << letter
-      end
-    end
-    encrypted_array
+    transformed_array = [a_letters, b_letters, c_letters, d_letters]
   end
 
-  def encrypted_message_as_string
-    encrypted_array = encrypted_message_as_array
-    encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).join
-  end
-
-  def decrypted_message_as_array
-    message_array = prep_message_for_shifts
-    a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    decrypted_array = [a_letters, b_letters, c_letters, d_letters]
-    message_array[0].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.a_shift * -1)
-        a_letters << @character_set[0]
-      else
-        a_letters << letter
-      end
+  def message_as_string(type)
+    if type == "encrypted"
+      return shifted_message_as_array(1)[0].zip(shifted_message_as_array(1)[1]).zip(shifted_message_as_array(1)[2]).zip(shifted_message_as_array(1)[3]).join
+    elsif type == "decrypted"
+      return shifted_message_as_array(-1)[0].zip(shifted_message_as_array(-1)[1]).zip(shifted_message_as_array(-1)[2]).zip(shifted_message_as_array(-1)[3]).join
     end
-    message_array[1].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.b_shift * -1)
-        b_letters << @character_set[0]
-      else
-        b_letters << letter
-      end
-    end
-    message_array[2].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.c_shift * -1)
-        c_letters << @character_set[0]
-      else
-        c_letters << letter
-      end
-    end
-    message_array[3].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.d_shift * -1)
-        d_letters << @character_set[0]
-      else
-        d_letters << letter
-      end
-    end
-    decrypted_array
-  end
-
-  def decrypted_message_as_string
-    decrypted_array = decrypted_message_as_array
-    decrypted_array[0].zip(decrypted_array[1]).zip(decrypted_array[2]).zip(decrypted_array[3]).join
   end
 
   def calculate_shifts
@@ -143,64 +58,46 @@ class Cipher
   # we can use math to figure out the original key for the solution.
   # Take the shifts in increments of (shift + 27) and then subtract the offsets from those.
   # Using the result, compare the increments until a 5 digit key can be created using the overlaps
-    a,b,c,d = prep_message_for_shifts
-    character_shifts = {a_shift: a, b_shift: b, c_shift: c, d_shift: d}
-    starting_message = @message.split("")
-    last_4_of_message = @message.split("")[-4..-1]
+    last_4_of_message = message_as_array[-4..-1]
     known_info = [" ","e","n","d"]
-    subtraction = 3
-    # CALCULATES THE SHIFTS USING THE "_END" AS KNOWN INFO
+    index_reducer = 3
     until known_info.empty?
-      if (starting_message.length - subtraction) % 4 == 1
-        #starts with a_shift
+      if (message_as_array.length - index_reducer) % 4 == 1
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.a_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.a_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
-        last_4_of_message.shift && known_info.shift && subtraction -= 1
-        # @shifts.a_offset
-      elsif (starting_message.length - subtraction) % 4 == 2
-        #starts with b_shift
+        last_4_of_message.shift && known_info.shift && index_reducer -= 1
+      elsif (message_as_array.length - index_reducer) % 4 == 2
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.b_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.b_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
-        last_4_of_message.shift && known_info.shift && subtraction -= 1
-        # @shifts.b_offset
-      elsif (starting_message.length - subtraction) % 4 == 3
-        #starts with c_shift
+        last_4_of_message.shift && known_info.shift && index_reducer -= 1
+      elsif (message_as_array.length - index_reducer) % 4 == 3
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.c_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.c_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
-        last_4_of_message.shift && known_info.shift && subtraction -= 1
-        # @shifts.c_offset
-      elsif (starting_message.length - subtraction) % 4 == 0
-        #starts with d_shift
+        last_4_of_message.shift && known_info.shift && index_reducer -= 1
+      elsif (message_as_array.length - index_reducer) % 4 == 0
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.d_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.d_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
-        last_4_of_message.shift && known_info.shift && subtraction -= 1
-        # @shifts.d_offset
+        last_4_of_message.shift && known_info.shift && index_reducer -= 1
       end
     end
-
-    # CALCULATES THE KEY USING THE KNOWN OFFSETS AND SHIFTS
-    shifts.a_key = (shifts.a_shift - shifts.a_offset).to_s.rjust(2, "0")
-    shifts.b_key = (shifts.b_shift - shifts.b_offset).to_s.rjust(2, "0")
-    shifts.c_key = (shifts.c_shift - shifts.c_offset).to_s.rjust(2, "0")
-    shifts.d_key = (shifts.d_shift - shifts.d_offset).to_s.rjust(2, "0")
   end
 
   def crack_encryption
     calculate_shifts
+    shifts.crack_key_calculator
     @key = shifts.get_valid_key
-    decrypted_message_as_string
+    message_as_string("decrypted")
   end
-
 end

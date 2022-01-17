@@ -11,14 +11,14 @@ class Enigma
 
   def encrypt(message, key = @random_key, date = @today)
     cipher = Cipher.new(message, key, date)
-    encrypted = {encryption: cipher.encrypted_message_as_string,
+    encrypted = {encryption: cipher.message_as_string("encrypted"),
                 key: key,
                 date: date}
   end
 
   def decrypt(ciphertext, key, date = @today)
     cipher = Cipher.new(ciphertext, key, date)
-    decrypted = {decryption: cipher.decrypted_message_as_string,
+    decrypted = {decryption: cipher.message_as_string("decrypted"),
                 key: key,
                 date: date}
   end
@@ -29,7 +29,4 @@ class Enigma
               key: cipher.key,
               date: date}
   end
-
-
-
 end
