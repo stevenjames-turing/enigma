@@ -33,21 +33,9 @@ class Shifts
       c_keys.each do |c_key|
         b_keys.each do |b_key|
           a_keys.each do |a_key|
-            if (a_key.to_s.rjust(2, "0")[1] == b_key.to_s.rjust(2, "0")[0])
-              (@a_key = a_key) && (@b_key = b_key)
-            else
-              next
-            end
-            if (@b_key.to_s.rjust(2, "0")[1] == c_key.to_s.rjust(2, "0")[0])
-              (@c_key = c_key)
-            else
-              next
-            end
-            if @c_key.to_s.rjust(2, "0")[1] == d_key.to_s.rjust(2, "0")[0]
-              (@d_key = d_key)
-            else
-              next
-            end
+            a_key.to_s.rjust(2, "0")[1] == b_key.to_s.rjust(2, "0")[0] ? (@a_key = a_key) && (@b_key = b_key) : next
+            @b_key.to_s.rjust(2, "0")[1] == c_key.to_s.rjust(2, "0")[0] ? (@c_key = c_key) : next
+            @c_key.to_s.rjust(2, "0")[1] == d_key.to_s.rjust(2, "0")[0] ? (@d_key = d_key) : next
           end
         end
       end
