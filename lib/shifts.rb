@@ -1,8 +1,9 @@
 class Shifts
 
-  attr_reader :date, :offset, :a_offset, :b_offset, :c_offset, :d_offset
-  attr_accessor :a_shift, :b_shift, :c_shift, :d_shift,
-                :key, :a_key, :b_key, :c_key, :d_key
+  attr_reader :date, :offset, :a_offset, :b_offset, :c_offset, :d_offset,
+              :key, :a_key, :b_key, :c_key, :d_key
+  attr_accessor :a_shift, :b_shift, :c_shift, :d_shift
+
 
   def initialize(key, date)
     @key = key
@@ -20,6 +21,13 @@ class Shifts
     @b_shift = @b_offset + @b_key
     @c_shift = @c_offset + @c_key
     @d_shift = @d_offset + @d_key
+  end
+
+  def crack_key_calculator
+    @a_key = (@a_shift - @a_offset).to_s.rjust(2, "0")
+    @b_key = (@b_shift - @b_offset).to_s.rjust(2, "0")
+    @c_key = (@c_shift - @c_offset).to_s.rjust(2, "0")
+    @d_key = (@d_shift - @d_offset).to_s.rjust(2, "0")
   end
 
   def get_valid_key

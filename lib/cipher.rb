@@ -92,16 +92,12 @@ class Cipher
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
       end
     end
-    shifts.a_key = (shifts.a_shift - shifts.a_offset).to_s.rjust(2, "0")
-    shifts.b_key = (shifts.b_shift - shifts.b_offset).to_s.rjust(2, "0")
-    shifts.c_key = (shifts.c_shift - shifts.c_offset).to_s.rjust(2, "0")
-    shifts.d_key = (shifts.d_shift - shifts.d_offset).to_s.rjust(2, "0")
   end
 
   def crack_encryption
     calculate_shifts
+    shifts.crack_key_calculator
     @key = shifts.get_valid_key
     message_as_string("decrypted")
   end
-
 end
