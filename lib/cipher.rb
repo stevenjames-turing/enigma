@@ -27,48 +27,36 @@ class Cipher
     message_hash = prep_message_for_shifts
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
     transformed_array = [a_letters, b_letters, c_letters, d_letters]
-    message_hash[:A].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
+    message_hash.each_pair do |key, array|
+      array.each do |char|
+        if @character_set.include?(char)
+          until @character_set[0] == char
+            @character_set = @character_set.rotate
+          end
+          if key == :A
+            @character_set = @character_set.rotate(shifts.a_shift * shift_direction)
+            a_letters << @character_set[0]
+          elsif key == :B
+            @character_set = @character_set.rotate(shifts.b_shift * shift_direction)
+            b_letters << @character_set[0]
+          elsif key == :C
+            @character_set = @character_set.rotate(shifts.c_shift * shift_direction)
+            c_letters << @character_set[0]
+          elsif key == :D
+            @character_set = @character_set.rotate(shifts.d_shift * shift_direction)
+            d_letters << @character_set[0]
+          end
+        else
+          if key == :A
+            a_letters << char
+          elsif key == :B
+            b_letters << char
+          elsif key == :C
+            c_letters << char
+          elsif key == :D
+            d_letters << char
+          end
         end
-        @character_set = @character_set.rotate(shifts.a_shift * shift_direction)
-        a_letters << @character_set[0]
-      else
-        a_letters << letter
-      end
-    end
-    message_hash[:B].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.b_shift * shift_direction)
-        b_letters << @character_set[0]
-      else
-        b_letters << letter
-      end
-    end
-    message_hash[:C].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.c_shift * shift_direction)
-        c_letters << @character_set[0]
-      else
-        c_letters << letter
-      end
-    end
-    message_hash[:D].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.d_shift * shift_direction)
-        d_letters << @character_set[0]
-      else
-        d_letters << letter
       end
     end
     transformed_array
