@@ -34,7 +34,7 @@ RSpec.describe Cipher do
   it 'can shift the characters and return encrypted message as array' do
     # expected = ["k","e","d","e","r"," ","o","h","u","l","w"]
     expected = [["k", "r", "u"], ["e", " ", "l"], ["d", "o", "w"], ["e", "h"]]
-    expect(cipher.encrypted_message_as_array).to eq(expected)
+    expect(cipher.message_as_array(1)).to eq(expected)
   end
 
   it 'can turn encrypted array into string' do
@@ -44,6 +44,6 @@ RSpec.describe Cipher do
   it 'returns any characters not included in the character set as itself' do
     cipher_char_test = Cipher.new("hello world!", "02715", "040895")
     expected = [["k", "r", "u"], ["e", " ", "l"], ["d", "o", "w"], ["e", "h", "!"]]
-    expect(cipher_char_test.encrypted_message_as_array).to eq(expected)
+    expect(cipher_char_test.message_as_array(1)).to eq(expected)
   end
 end

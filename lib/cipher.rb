@@ -24,17 +24,16 @@ class Cipher
     shifted_arrays = [a_letters, b_letters.compact, c_letters.compact, d_letters.compact]
   end
 
-  def encrypted_message_as_array
-    # CAN I USE A HASH FOR BETTER ORGANIZING OF DATA?
+  def message_as_array(shift_direction)
     message_array = prep_message_for_shifts
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    encrypted_array = [a_letters, b_letters, c_letters, d_letters]
+    transformed_array = [a_letters, b_letters, c_letters, d_letters]
     message_array[0].each do |letter|
       if @character_set.include?(letter)
         until @character_set[0] == letter
           @character_set = @character_set.rotate
         end
-        @character_set = @character_set.rotate(shifts.a_shift)
+        @character_set = @character_set.rotate(shifts.a_shift * shift_direction)
         a_letters << @character_set[0]
       else
         a_letters << letter
@@ -45,7 +44,7 @@ class Cipher
         until @character_set[0] == letter
           @character_set = @character_set.rotate
         end
-        @character_set = @character_set.rotate(shifts.b_shift)
+        @character_set = @character_set.rotate(shifts.b_shift * shift_direction)
         b_letters << @character_set[0]
       else
         b_letters << letter
@@ -56,7 +55,7 @@ class Cipher
         until @character_set[0] == letter
           @character_set = @character_set.rotate
         end
-        @character_set = @character_set.rotate(shifts.c_shift)
+        @character_set = @character_set.rotate(shifts.c_shift * shift_direction)
         c_letters << @character_set[0]
       else
         c_letters << letter
@@ -67,84 +66,22 @@ class Cipher
         until @character_set[0] == letter
           @character_set = @character_set.rotate
         end
-        @character_set = @character_set.rotate(shifts.d_shift)
+        @character_set = @character_set.rotate(shifts.d_shift * shift_direction)
         d_letters << @character_set[0]
       else
         d_letters << letter
       end
     end
-    encrypted_array
+    transformed_array
   end
 
   def message_as_string(type)
     if type == "encrypted"
-      return encrypted_message_as_array[0].zip(encrypted_message_as_array[1]).zip(encrypted_message_as_array[2]).zip(encrypted_message_as_array[3]).join
+      return message_as_array(1)[0].zip(message_as_array(1)[1]).zip(message_as_array(1)[2]).zip(message_as_array(1)[3]).join
     elsif type == "decrypted"
-      return decrypted_message_as_array[0].zip(decrypted_message_as_array[1]).zip(decrypted_message_as_array[2]).zip(decrypted_message_as_array[3]).join
+      return message_as_array(-1)[0].zip(message_as_array(-1)[1]).zip(message_as_array(-1)[2]).zip(message_as_array(-1)[3]).join
     end
   end
-
-  # def decrypted_message_as_string
-  #   decrypted_array = decrypted_message_as_array
-  #   decrypted_array[0].zip(decrypted_array[1]).zip(decrypted_array[2]).zip(decrypted_array[3]).join
-  # end
-
-  # def encrypted_message_as_string
-  #   encrypted_array = encrypted_message_as_array
-  #   encrypted_array[0].zip(encrypted_array[1]).zip(encrypted_array[2]).zip(encrypted_array[3]).join
-  # end
-
-  def decrypted_message_as_array
-    message_array = prep_message_for_shifts
-    a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    decrypted_array = [a_letters, b_letters, c_letters, d_letters]
-    message_array[0].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.a_shift * -1)
-        a_letters << @character_set[0]
-      else
-        a_letters << letter
-      end
-    end
-    message_array[1].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.b_shift * -1)
-        b_letters << @character_set[0]
-      else
-        b_letters << letter
-      end
-    end
-    message_array[2].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.c_shift * -1)
-        c_letters << @character_set[0]
-      else
-        c_letters << letter
-      end
-    end
-    message_array[3].each do |letter|
-      if @character_set.include?(letter)
-        until @character_set[0] == letter
-          @character_set = @character_set.rotate
-        end
-        @character_set = @character_set.rotate(shifts.d_shift * -1)
-        d_letters << @character_set[0]
-      else
-        d_letters << letter
-      end
-    end
-    decrypted_array
-  end
-
 
   def calculate_shifts
   # Offset is already known due to date being provided and the last 4 characters will always be `_end`.

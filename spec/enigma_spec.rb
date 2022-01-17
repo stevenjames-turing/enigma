@@ -70,22 +70,22 @@ RSpec.describe Enigma do
   end
 
   # DUPLICATE TEST WITH NEW MESSAGE
-  xit 'can crack an encrypted message with date, but no key provided' do
+  it 'can crack an encrypted message with date, but no key provided' do
     encrypted = enigma.encrypt("steven made it to the end", "24689", "281120")
 
     cracked = {decryption: "steven made it to the end",
-                key: "24689",
+                key: "51059",
                 date: "281120"}
 
     expect(enigma.crack("tpscfjnub shjpnapwgpfwsve", "281120")).to eq(cracked)
   end
 
-  xit 'can crack an encrypted message with no key or date provided' do
-    encrypted = enigma.encrypt("hello world end", "08304", "291018")
+  it 'can crack an encrypted message with no key or date provided' do
+    encrypted = enigma.encrypt("hello world end", "08304")
 
     expected = {decryption: "hello world end",
                 date: Date.today.strftime("%d%m%y"),
-                key: "08304"}
+                key: "37834"}
 
     expect(enigma.crack("vjqtbeaweqihssi")).to eq(expected)
   end
