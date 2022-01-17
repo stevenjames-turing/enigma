@@ -32,7 +32,6 @@ RSpec.describe Cipher do
   end
 
   it 'can shift the characters and return encrypted message as array' do
-    # expected = ["k","e","d","e","r"," ","o","h","u","l","w"]
     expected = [["k", "r", "u"], ["e", " ", "l"], ["d", "o", "w"], ["e", "h"]]
     expect(cipher.shifted_message_as_array(1)).to eq(expected)
   end
