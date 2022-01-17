@@ -26,8 +26,8 @@ RSpec.describe Cipher do
   end
 
   it 'can split the message into arrays to prepare for shifts' do
-    expected = [["h", "o", "r"], ["e", " ", "l"], ["l", "w", "d"], ["l", "o"]]
-    expect(cipher.prep_message_for_shifts.count).to eq(4)
+    expected = {A: ["h", "o", "r"], B: ["e", " ", "l"], C: ["l", "w", "d"], D: ["l", "o"]}
+    expect(cipher.prep_message_for_shifts.keys.count).to eq(4)
     expect(cipher.prep_message_for_shifts).to eq(expected)
   end
 

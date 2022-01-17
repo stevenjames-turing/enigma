@@ -11,7 +11,6 @@ class Cipher
   end
 
   def prep_message_for_shifts
-    # CAN I USE A HASH FOR BETTER ORGANIZING OF DATA?
     message_as_array = @message.split("")
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
     until message_as_array.empty?
@@ -21,14 +20,14 @@ class Cipher
       d_letters << message_as_array[3]
       4.times {message_as_array.shift}
     end
-    shifted_arrays = [a_letters, b_letters.compact, c_letters.compact, d_letters.compact]
+    prepped_hash = {A: a_letters, B: b_letters.compact, C: c_letters.compact, D: d_letters.compact}
   end
 
   def message_as_array(shift_direction)
-    message_array = prep_message_for_shifts
+    message_hash = prep_message_for_shifts
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
     transformed_array = [a_letters, b_letters, c_letters, d_letters]
-    message_array[0].each do |letter|
+    message_hash[:A].each do |letter|
       if @character_set.include?(letter)
         until @character_set[0] == letter
           @character_set = @character_set.rotate
@@ -39,7 +38,7 @@ class Cipher
         a_letters << letter
       end
     end
-    message_array[1].each do |letter|
+    message_hash[:B].each do |letter|
       if @character_set.include?(letter)
         until @character_set[0] == letter
           @character_set = @character_set.rotate
@@ -50,7 +49,7 @@ class Cipher
         b_letters << letter
       end
     end
-    message_array[2].each do |letter|
+    message_hash[:C].each do |letter|
       if @character_set.include?(letter)
         until @character_set[0] == letter
           @character_set = @character_set.rotate
@@ -61,7 +60,7 @@ class Cipher
         c_letters << letter
       end
     end
-    message_array[3].each do |letter|
+    message_hash[:D].each do |letter|
       if @character_set.include?(letter)
         until @character_set[0] == letter
           @character_set = @character_set.rotate
@@ -95,48 +94,37 @@ class Cipher
     last_4_of_message = starting_message[-4..-1]
     known_info = [" ","e","n","d"]
     index_reducer = 3
-    # CALCULATES THE SHIFTS USING THE "_END" AS KNOWN INFO
     until known_info.empty?
       if (starting_message.length - index_reducer) % 4 == 1
-        #starts with a_shift
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.a_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.a_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-        # @shifts.a_offset
       elsif (starting_message.length - index_reducer) % 4 == 2
-        #starts with b_shift
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.b_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.b_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-        # @shifts.b_offset
       elsif (starting_message.length - index_reducer) % 4 == 3
-        #starts with c_shift
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.c_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.c_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-        # @shifts.c_offset
       elsif (starting_message.length - index_reducer) % 4 == 0
-        #starts with d_shift
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.d_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.d_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-        # @shifts.d_offset
       end
     end
-
-    # CALCULATES THE KEY USING THE KNOWN OFFSETS AND SHIFTS
     shifts.a_key = (shifts.a_shift - shifts.a_offset).to_s.rjust(2, "0")
     shifts.b_key = (shifts.b_shift - shifts.b_offset).to_s.rjust(2, "0")
     shifts.c_key = (shifts.c_shift - shifts.c_offset).to_s.rjust(2, "0")
