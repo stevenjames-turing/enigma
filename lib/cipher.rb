@@ -10,63 +10,45 @@ class Cipher
     @shifts = Shifts.new(@key, @date)
   end
 
+  def message_as_array
+    @message.split("")
+  end
+
   def prep_message_for_shifts
-    message_as_array = @message.split("")
+    original_message = message_as_array
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    until message_as_array.empty?
-      a_letters << message_as_array[0]
-      b_letters << message_as_array[1]
-      c_letters << message_as_array[2]
-      d_letters << message_as_array[3]
-      4.times {message_as_array.shift}
+    until original_message.empty?
+      a_letters << original_message[0]; b_letters << original_message[1]
+      c_letters << original_message[2]; d_letters << original_message[3]
+      4.times {original_message.shift}
     end
     prepped_hash = {A: a_letters, B: b_letters.compact, C: c_letters.compact, D: d_letters.compact}
   end
 
-  def message_as_array(shift_direction)
-    message_hash = prep_message_for_shifts
+  def shifted_message_as_array(shift_direction)
     a_letters = []; b_letters = []; c_letters = []; d_letters = []
-    transformed_array = [a_letters, b_letters, c_letters, d_letters]
-    message_hash.each_pair do |key, array|
+    prep_message_for_shifts.each_pair do |key, array|
       array.each do |char|
         if @character_set.include?(char)
-          until @character_set[0] == char
-            @character_set = @character_set.rotate
-          end
-          if key == :A
-            @character_set = @character_set.rotate(shifts.a_shift * shift_direction)
-            a_letters << @character_set[0]
-          elsif key == :B
-            @character_set = @character_set.rotate(shifts.b_shift * shift_direction)
-            b_letters << @character_set[0]
-          elsif key == :C
-            @character_set = @character_set.rotate(shifts.c_shift * shift_direction)
-            c_letters << @character_set[0]
-          elsif key == :D
-            @character_set = @character_set.rotate(shifts.d_shift * shift_direction)
-            d_letters << @character_set[0]
-          end
+          (@character_set = @character_set.rotate) until @character_set[0] == char
+          (@character_set = @character_set.rotate(shifts.a_shift * shift_direction)) && (a_letters << @character_set[0]) if key == :A
+          (@character_set = @character_set.rotate(shifts.b_shift * shift_direction)) && (b_letters << @character_set[0]) if key == :B
+          (@character_set = @character_set.rotate(shifts.c_shift * shift_direction)) && (c_letters << @character_set[0]) if key == :C
+          (@character_set = @character_set.rotate(shifts.d_shift * shift_direction)) && (d_letters << @character_set[0]) if key == :D
         else
-          if key == :A
-            a_letters << char
-          elsif key == :B
-            b_letters << char
-          elsif key == :C
-            c_letters << char
-          elsif key == :D
-            d_letters << char
-          end
+          a_letters << char if key == :A; b_letters << char if key == :B
+          c_letters << char if key == :C; d_letters << char if key == :D
         end
       end
     end
-    transformed_array
+    transformed_array = [a_letters, b_letters, c_letters, d_letters]
   end
 
   def message_as_string(type)
     if type == "encrypted"
-      return message_as_array(1)[0].zip(message_as_array(1)[1]).zip(message_as_array(1)[2]).zip(message_as_array(1)[3]).join
+      return shifted_message_as_array(1)[0].zip(shifted_message_as_array(1)[1]).zip(shifted_message_as_array(1)[2]).zip(shifted_message_as_array(1)[3]).join
     elsif type == "decrypted"
-      return message_as_array(-1)[0].zip(message_as_array(-1)[1]).zip(message_as_array(-1)[2]).zip(message_as_array(-1)[3]).join
+      return shifted_message_as_array(-1)[0].zip(shifted_message_as_array(-1)[1]).zip(shifted_message_as_array(-1)[2]).zip(shifted_message_as_array(-1)[3]).join
     end
   end
 
@@ -76,35 +58,32 @@ class Cipher
   # we can use math to figure out the original key for the solution.
   # Take the shifts in increments of (shift + 27) and then subtract the offsets from those.
   # Using the result, compare the increments until a 5 digit key can be created using the overlaps
-    # a,b,c,d = prep_message_for_shifts
-    # character_shifts = {a_shift: a, b_shift: b, c_shift: c, d_shift: d}
-    starting_message = @message.split("")
-    last_4_of_message = starting_message[-4..-1]
+    last_4_of_message = message_as_array[-4..-1]
     known_info = [" ","e","n","d"]
     index_reducer = 3
     until known_info.empty?
-      if (starting_message.length - index_reducer) % 4 == 1
+      if (message_as_array.length - index_reducer) % 4 == 1
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.a_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.a_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-      elsif (starting_message.length - index_reducer) % 4 == 2
+      elsif (message_as_array.length - index_reducer) % 4 == 2
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.b_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.b_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-      elsif (starting_message.length - index_reducer) % 4 == 3
+      elsif (message_as_array.length - index_reducer) % 4 == 3
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.c_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
           @shifts.c_shift = @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)
         end
         last_4_of_message.shift && known_info.shift && index_reducer -= 1
-      elsif (starting_message.length - index_reducer) % 4 == 0
+      elsif (message_as_array.length - index_reducer) % 4 == 0
         if @character_set.index(last_4_of_message.first) - @character_set.index(known_info.first) < 0
           @shifts.d_shift = ((@character_set.index(last_4_of_message.first) - @character_set.index(known_info.first)) + 27)
         else
